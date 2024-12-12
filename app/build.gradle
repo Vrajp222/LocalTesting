@@ -1,0 +1,58 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace "jlin2.examples.localtesting"
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "jlin2.examples.localtesting"
+        minSdk 20
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation 'org.testng:testng:6.9.6'
+    testImplementation 'junit:junit:4.13.2'
+
+    // Keep hamcrest-core version 2.2, exclude the one from junit
+    testImplementation 'org.hamcrest:hamcrest-core:2.2'
+    testImplementation 'org.hamcrest:hamcrest-library:2.2'
+
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+// Exclude hamcrest-core from JUnit to prevent duplicate classes
+configurations.all {
+    resolutionStrategy {
+        force 'com.google.guava:guava:31.1-jre' // Ensure latest compatible version
+        exclude group: 'com.google.guava', module: 'listenablefuture'
+        exclude group: 'org.hamcrest', module: 'hamcrest-core' // Exclude hamcrest-core from junit
+    }
+}
